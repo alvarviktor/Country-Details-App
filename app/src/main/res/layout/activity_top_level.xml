@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:textSize="28sp"
+        android:textColor="#000000"
+        android:text="@string/regions" />
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/earth"
+        android:contentDescription="@string/logo" />
+
+    <ListView
+        android:id="@+id/list_regions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/regions"/>
+
+</LinearLayout>

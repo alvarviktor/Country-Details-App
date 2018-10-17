@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Alvar_Zhang</string>
+    <string name="regions">Regions</string>
+    <string name="logo">Earth Logo</string>
+    <string name="flag">Flag Image</string>
+    <string-array name="regions">
+        <item>Africa</item>
+        <item>Americas</item>
+        <item>Asia</item>
+        <item>Europe</item>
+        <item>Oceania</item>
+    </string-array>
+</resources>
