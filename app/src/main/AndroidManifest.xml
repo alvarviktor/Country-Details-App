@@ -19,6 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".CountryActivity" />
+        <activity android:name=".MyDeviceActivity"
+                  android:label="@string/device_info">
+        </activity>
     </application>
 
 </manifest>

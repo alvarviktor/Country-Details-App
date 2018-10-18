@@ -45,6 +45,9 @@ public class TopLevelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_level);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         new GetContacts().execute();
 
         final ListView regionList = findViewById(R.id.list_regions);
@@ -57,11 +60,6 @@ public class TopLevelActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,6 +75,10 @@ public class TopLevelActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_message:
+                return true;
+            case R.id.action_menu:
+                Intent i = new Intent(TopLevelActivity.this, MyDeviceActivity.class);
+                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

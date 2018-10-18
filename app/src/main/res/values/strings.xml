@@ -11,4 +11,6 @@
         <item>Oceania</item>
     </string-array>
     <string name="action_message">Share</string>
+    <string name="device_info">Device Information</string>
+    <string name="my_device_title">My Device</string>
 </resources>

@@ -8,5 +8,10 @@
         app:showAsAction="ifRoom"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
 
+    <item android:id="@+id/action_menu"
+        android:title="@string/my_device_title"
+        android:icon="@drawable/twotone_more_vert_white_24dp"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
 
 </menu>
