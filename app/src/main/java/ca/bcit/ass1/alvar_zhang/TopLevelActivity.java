@@ -48,7 +48,7 @@ public class TopLevelActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        new GetContacts().execute();
+//        new GetContacts().execute();
 
         final ListView regionList = findViewById(R.id.list_regions);
         regionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -186,8 +186,8 @@ public class TopLevelActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             // Dismiss the progress dialog
-            if (pDialog.isShowing())
-                pDialog.dismiss();
+//            if (pDialog.isShowing())
+//                pDialog.dismiss();
 
 //            for (Country myCountry: countryList) {
 //                if (myCountry.getName().equals("Afghanistan")) {
