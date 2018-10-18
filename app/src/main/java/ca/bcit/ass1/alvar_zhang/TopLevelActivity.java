@@ -4,6 +4,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -25,7 +31,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-public class TopLevelActivity extends Activity {
+public class TopLevelActivity extends AppCompatActivity {
+
+    private ShareActionProvider shareActionProvider;
 
     private String TAG = TopLevelActivity.class.getSimpleName(); // get simple name of class
     private ProgressDialog pDialog; // android class that gives progress animation
@@ -50,7 +58,38 @@ public class TopLevelActivity extends Activity {
             }
         });
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu. This adds items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_message);
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        setShareActionIntent("Join us on this vacation.");
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_message:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setShareActionIntent(String text) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(Intent.EXTRA_TEXT, text);
+        shareActionProvider.setShareIntent(i);
+    }
+
 
     /**
      * Async task class to get json by making HTTP call
@@ -62,10 +101,10 @@ public class TopLevelActivity extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
             // Showing progress dialog
-            pDialog = new ProgressDialog(TopLevelActivity.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
+//            pDialog = new ProgressDialog(TopLevelActivity.this);
+//            pDialog.setMessage("Please wait...");
+//            pDialog.setCancelable(false);
+//            pDialog.show();
 
         }
 
@@ -145,14 +184,14 @@ public class TopLevelActivity extends Activity {
             super.onPostExecute(result);
 
             // Dismiss the progress dialog
-//            if (pDialog.isShowing())
-//                pDialog.dismiss();
+            if (pDialog.isShowing())
+                pDialog.dismiss();
 
-            for (Country myCountry: countryList) {
-                if (myCountry.getName().equals("Afghanistan")) {
-                    System.out.println("AF found");
-                }
-            }
+//            for (Country myCountry: countryList) {
+//                if (myCountry.getName().equals("Afghanistan")) {
+//                    System.out.println("AF found");
+//                }
+//            }
             //Toon[] toonArray = toonList.toArray(new Toon[toonList.size()]);
 
 //            CountryAdapter adapter = new CountryAdapter(CountryActivity.this, countryList);

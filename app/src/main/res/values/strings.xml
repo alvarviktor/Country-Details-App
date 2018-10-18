@@ -10,4 +10,5 @@
         <item>Europe</item>
         <item>Oceania</item>
     </string-array>
+    <string name="action_message">Share</string>
 </resources>
