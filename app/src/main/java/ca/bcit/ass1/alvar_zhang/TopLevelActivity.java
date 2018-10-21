@@ -1,7 +1,7 @@
 package ca.bcit.ass1.alvar_zhang;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -13,55 +13,54 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 public class TopLevelActivity extends AppCompatActivity {
 
     private ShareActionProvider shareActionProvider;
 
     private String TAG = TopLevelActivity.class.getSimpleName(); // get simple name of class
-    private ProgressDialog pDialog; // android class that gives progress animation
+    // ProgressDialog Box
+    private ProgressDialog pDialog;
     // URL to get contacts JSON
     private static String SERVICE_URL = "https://restcountries.eu/rest/v2/all"; // where data is coming from
-    private ArrayList<Country> countryList; // my list view
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_level);
+
+        // Sets the ActionBar as a Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        new GetContacts().execute();
+        // Executes AsyncTask to retrieve and sort Countries
+        new GetContacts().execute();
 
-        final ListView regionList = findViewById(R.id.list_regions);
+        // Create a ListView of Regions
+        ListView regionList = findViewById(R.id.list_regions);
         regionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int id, long l) {
-                String selectedRegion = (String) regionList.getItemAtPosition(id);
                 Intent intent = new Intent(TopLevelActivity.this, CountryActivity.class);
-                intent.putExtra("regionName", selectedRegion);
+                intent.putExtra("regionIndex", id);
                 startActivity(intent);
             }
         });
     }
 
+    // Creates the Option Menu on the App Bar
+    // PRE: Parameters must be a menu
+    // POST:
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu. This adds items to the app bar.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -96,19 +95,38 @@ public class TopLevelActivity extends AppCompatActivity {
     /**
      * Async task class to get json by making HTTP call
      */
-    // Void is not void, it is an Array
     private class GetContacts extends AsyncTask<Void, Void, Void> {
 
         @Override
+        // Displays the Progress Dialog of the background AsyncTask
+        // PRE: Zero Parameters
+        // POST: Creates a new ProgressDialog
+        // RETURN: void
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
+//            // Progress Dialog Setup
 //            pDialog = new ProgressDialog(TopLevelActivity.this);
-//            pDialog.setMessage("Please wait...");
-//            pDialog.setCancelable(false);
+//            pDialog.setCancelable(true); // allows user to cancel process
+//            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL); // sets style
+//            pDialog.setMax(100); // max amount of progress units
+//            pDialog.setMessage(getString(R.string.downloadingCountries));
+//
+//            // Make Cancel Button
+//            pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.progressCancel),
+//                    new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss(); // removes progress dialog
+//                        }
+//                    });
 //            pDialog.show();
-
         }
+
+//        @Override
+//        protected void onProgressUpdate(Integer... values) {
+//            super.onProgressUpdate(values);
+//            pDialog.setProgress(values[0]);
+//        }
 
         @Override
         protected Void doInBackground(Void... arg0) {
@@ -131,25 +149,42 @@ public class TopLevelActivity extends AppCompatActivity {
                         JSONObject c = countryJsonArray.getJSONObject(i);
 
                         String name = c.getString("name");
-                        String capital = c.getString("capital");
+//                        String capital = c.getString("capital");
                         String region = c.getString("region");
 //                        String population = c.getString("area");
 //                        String borders = c.getString("borders");
-                        String flag = c.getString("flag");
+//                        String flag = c.getString("flag");
 
-                        // tmp hash map for single contact
                         Country country = new Country();
 
                         // adding each child node to HashMap key => value
                         country.setName(name);
-                        country.setCapital(capital);
+//                        country.setCapital(capital);
                         country.setRegion(region);
 //                        country.setPopulation(Integer.parseInt(population));
 //                        country.setBorders(new ArrayList<String>(Arrays.asList(borders.split(","))));
-                        country.setFlag(flag);
+//                        country.setFlag(flag);
 
-                        // adding contact to contact list
-                        countryList.add(country);
+                        // Add Countries to their Region
+                        switch (region) {
+                            case "Africa":
+                                Country.AFRICA.add(country);
+                                break;
+                            case "Americas":
+                                Country.AMERICAS.add(country);
+                                break;
+                            case "Asia":
+                                Country.ASIA.add(country);
+                                break;
+                            case "Europe":
+                                Country.EUROPE.add(country);
+                                break;
+                            case "Oceania":
+                                Country.OCEANIA.add(country);
+                                break;
+                            default:
+                                Log.e(TAG, "Incorrectly Passed Region: " + region);
+                        }
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -189,14 +224,15 @@ public class TopLevelActivity extends AppCompatActivity {
 //            if (pDialog.isShowing())
 //                pDialog.dismiss();
 
-//            for (Country myCountry: countryList) {
+//            for (Country myCountry: Country.AFRICA) {
 //                if (myCountry.getName().equals("Afghanistan")) {
-//                    System.out.println("AF found");
+//                    Log.e(TAG, "AFGHAN FOUND");
 //                }
 //            }
+
             //Toon[] toonArray = toonList.toArray(new Toon[toonList.size()]);
 
-//            CountryAdapter adapter = new CountryAdapter(CountryActivity.this, countryList);
+            //CountryAdapter adapter = new CountryAdapter(CountryActivity.this, countryList);
 
             // Attach the adapter to a ListView
 //            lv.setAdapter(adapter);

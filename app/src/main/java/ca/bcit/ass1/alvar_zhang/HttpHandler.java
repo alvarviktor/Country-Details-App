@@ -12,6 +12,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class HttpHandler {
     private static final String TAG = HttpHandler.class.getSimpleName();
     public HttpHandler() {   }

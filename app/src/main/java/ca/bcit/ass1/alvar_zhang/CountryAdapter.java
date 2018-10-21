@@ -37,13 +37,13 @@ public class CountryAdapter extends ArrayAdapter<Country> {
         // Populate the data into the template view using the data object
         tvName.setText(country.getName());
 
-        ImageView imgOnePhoto = (ImageView) convertView.findViewById(R.id.flagImage);
-        //DownloadImageTask dit = new DownloadImageTask(_context, imgOnePhoto);
-        //dit.execute(toon.getPicture());
-        // Use the Downloader task to get the picture & attach to the View
-        if (country.getFlag() != null) {
-            new ImageDownloaderTask(imgOnePhoto).execute(country.getFlag());
-        }
+//        ImageView imgOnePhoto = (ImageView) convertView.findViewById(R.id.flagImage);
+//        //DownloadImageTask dit = new DownloadImageTask(_context, imgOnePhoto);
+//        //dit.execute(toon.getPicture());
+//        // Use the Downloader task to get the picture & attach to the View
+//        if (country.getFlag() != null) {
+//            new ImageDownloaderTask(imgOnePhoto).execute(country.getFlag());
+//        }
 
         // Return the completed view to render on screen
         return convertView;
