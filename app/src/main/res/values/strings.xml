@@ -15,4 +15,6 @@
     <string name="my_device_title">My Device</string>
     <string name="downloadingCountries">Downloading List of All Countries</string>
     <string name="progressCancel">Cancel</string>
+    <string name="countryDetails">Country Details</string>
+    <string name="teamNames"><![CDATA[Created By: Viktor Alvar & ZiQian Zhang]]></string>
 </resources>

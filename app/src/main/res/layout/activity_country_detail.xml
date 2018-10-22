@@ -6,6 +6,8 @@
     android:orientation="vertical"
     tools:ignore="WebViewLayout">
 
+    <include layout="@layout/toolbar_main" android:id="@+id/toolbar"/>
+
     <WebView
         android:id="@+id/flag"
         android:layout_height="wrap_content"

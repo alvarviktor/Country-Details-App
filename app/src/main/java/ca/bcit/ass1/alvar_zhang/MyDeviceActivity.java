@@ -2,6 +2,7 @@ package ca.bcit.ass1.alvar_zhang;
 
 import android.os.Build;
 import android.provider.Settings;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -38,8 +39,7 @@ public class MyDeviceActivity extends AppCompatActivity {
         versionTextView.setText(version);
         versionReleaseTextView.setText(version_release);
         serialNumberTextView.setText(serial_number);
+
     }
-
-
 
 }

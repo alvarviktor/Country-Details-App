@@ -22,8 +22,6 @@ import org.json.JSONObject;
 
 public class TopLevelActivity extends AppCompatActivity {
 
-    private ShareActionProvider shareActionProvider;
-
     private String TAG = TopLevelActivity.class.getSimpleName(); // get simple name of class
     // ProgressDialog Box
     private ProgressDialog pDialog;
@@ -34,10 +32,6 @@ public class TopLevelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_level);
-
-        // Sets the ActionBar as a Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         // Executes AsyncTask to retrieve and sort Countries
         new GetContacts().execute();
@@ -52,48 +46,6 @@ public class TopLevelActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    // Creates the Option Menu on the App Bar
-    // PRE: Parameters must be a menu
-    // POST:
-    // RETURN: boolean
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu. This adds items to the app bar.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_message);
-        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        setShareActionIntent("Join us on this vacation.");
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    //
-    // PRE:
-    // POST:
-    // RETURN:
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_message:
-                return true;
-            case R.id.action_menu:
-                Intent i = new Intent(TopLevelActivity.this, MyDeviceActivity.class);
-                startActivity(i);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    //
-    // PRE:
-    // POST:
-    // RETURN: void
-    private void setShareActionIntent(String text) {
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("text/plain");
-        i.putExtra(Intent.EXTRA_TEXT, text);
-        shareActionProvider.setShareIntent(i);
     }
 
     /**
@@ -129,8 +81,8 @@ public class TopLevelActivity extends AppCompatActivity {
 
         @Override
         // Progresses and Increments the Progress Dialog
-        // PRE:
-        // POST:
+        // PRE: Integer representing progress unit
+        // POST: Sets the progress of the dialog
         // RETURN: void
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
@@ -139,8 +91,8 @@ public class TopLevelActivity extends AppCompatActivity {
 
         @Override
         // GETS JSON Objects and Creates County Objects
-        // PRE:
-        // POST:
+        // PRE: No parameter arguments
+        // POST: Adds all Country Objects to ArrayList
         // RETURN: Void
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
@@ -237,9 +189,9 @@ public class TopLevelActivity extends AppCompatActivity {
         }
 
         @Override
-        //
-        // PRE:
-        // POST:
+        // Dismisses the progress dialog
+        // PRE: No parameters
+        // POST: Dismiss progress dialog
         // RETURN: void
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
@@ -247,4 +199,5 @@ public class TopLevelActivity extends AppCompatActivity {
                 pDialog.dismiss();
         }
     }
+
 }

@@ -24,8 +24,13 @@
         <activity android:name=".CountryActivity" />
         <activity
             android:name=".MyDeviceActivity"
-            android:label="@string/device_info"></activity>
-        <activity android:name=".CountryDetailActivity"></activity>
+            android:label="@string/device_info"
+            android:parentActivityName=".CountryDetailActivity">
+        </activity>
+        <activity
+            android:name=".CountryDetailActivity"
+            android:label="@string/countryDetails">
+        </activity>
     </application>
 
 </manifest>

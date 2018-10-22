@@ -4,17 +4,22 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar_main" android:id="@+id/toolbar"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:textSize="28sp"
+        android:textColor="#000000"
+        android:text="@string/regions" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:textSize="28sp"
-        android:textColor="#000000"
-        android:text="@string/regions" />
+        android:layout_marginBottom="10dp"
+        android:textSize="14sp"
+        android:text="@string/teamNames" />
 
     <ImageView
         android:layout_width="200dp"
