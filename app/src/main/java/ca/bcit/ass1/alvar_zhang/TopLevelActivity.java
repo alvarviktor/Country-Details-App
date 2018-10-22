@@ -13,13 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 import android.os.AsyncTask;
-
 import android.util.Log;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +57,7 @@ public class TopLevelActivity extends AppCompatActivity {
     // Creates the Option Menu on the App Bar
     // PRE: Parameters must be a menu
     // POST:
+    // RETURN: boolean
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu. This adds items to the app bar.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -71,6 +68,10 @@ public class TopLevelActivity extends AppCompatActivity {
     }
 
     @Override
+    //
+    // PRE:
+    // POST:
+    // RETURN:
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_message:
@@ -84,6 +85,10 @@ public class TopLevelActivity extends AppCompatActivity {
         }
     }
 
+    //
+    // PRE:
+    // POST:
+    // RETURN: void
     private void setShareActionIntent(String text) {
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("text/plain");
@@ -91,11 +96,11 @@ public class TopLevelActivity extends AppCompatActivity {
         shareActionProvider.setShareIntent(i);
     }
 
-
     /**
      * Async task class to get json by making HTTP call
+     * Parameters <Void, Integer, Void>
      */
-    private class GetContacts extends AsyncTask<Void, Void, Void> {
+    private class GetContacts extends AsyncTask<Void, Integer, Void> {
 
         @Override
         // Displays the Progress Dialog of the background AsyncTask
@@ -104,31 +109,39 @@ public class TopLevelActivity extends AppCompatActivity {
         // RETURN: void
         protected void onPreExecute() {
             super.onPreExecute();
-//            // Progress Dialog Setup
-//            pDialog = new ProgressDialog(TopLevelActivity.this);
-//            pDialog.setCancelable(true); // allows user to cancel process
-//            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL); // sets style
-//            pDialog.setMax(100); // max amount of progress units
-//            pDialog.setMessage(getString(R.string.downloadingCountries));
-//
-//            // Make Cancel Button
-//            pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.progressCancel),
-//                    new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss(); // removes progress dialog
-//                        }
-//                    });
-//            pDialog.show();
+            // Progress Dialog Setup
+            pDialog = new ProgressDialog(TopLevelActivity.this);
+            pDialog.setCancelable(true); // allows user to cancel process
+            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL); // sets style
+            pDialog.setMax(100); // max amount of progress units
+            pDialog.setMessage(getString(R.string.downloadingCountries));
+
+            // Make Cancel Button
+            pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.progressCancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss(); // removes progress dialog
+                        }
+                    });
+            pDialog.show();
         }
 
-//        @Override
-//        protected void onProgressUpdate(Integer... values) {
-//            super.onProgressUpdate(values);
-//            pDialog.setProgress(values[0]);
-//        }
+        @Override
+        // Progresses and Increments the Progress Dialog
+        // PRE:
+        // POST:
+        // RETURN: void
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            pDialog.setProgress(values[0]);
+        }
 
         @Override
+        // GETS JSON Objects and Creates County Objects
+        // PRE:
+        // POST:
+        // RETURN: Void
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
 
@@ -139,31 +152,34 @@ public class TopLevelActivity extends AppCompatActivity {
 
             if (jsonStr != null) {
                 try {
-                    //JSONObject jsonObj = new JSONObject(jsonStr);
-
                     // Getting JSON Array node
                     JSONArray countryJsonArray = new JSONArray(jsonStr);
+
+                    // Progress Dialog Counter
+                    int countryCounter = 0;
 
                     // looping through All Contacts
                     for (int i = 0; i < countryJsonArray.length(); i++) {
                         JSONObject c = countryJsonArray.getJSONObject(i);
 
                         String name = c.getString("name");
-//                        String capital = c.getString("capital");
+                        String capital = c.getString("capital");
                         String region = c.getString("region");
-//                        String population = c.getString("area");
-//                        String borders = c.getString("borders");
-//                        String flag = c.getString("flag");
+                        String population = c.getString("population");
+                        String area = c.getString("area");
+                        String borders = c.getString("borders");
+                        String flag = c.getString("flag");
 
                         Country country = new Country();
 
                         // adding each child node to HashMap key => value
                         country.setName(name);
-//                        country.setCapital(capital);
+                        country.setCapital(capital);
                         country.setRegion(region);
-//                        country.setPopulation(Integer.parseInt(population));
-//                        country.setBorders(new ArrayList<String>(Arrays.asList(borders.split(","))));
-//                        country.setFlag(flag);
+                        country.setPopulation(population);
+                        country.setArea(area);
+                        country.setBorders(borders);
+                        country.setFlag(flag);
 
                         // Add Countries to their Region
                         switch (region) {
@@ -185,6 +201,12 @@ public class TopLevelActivity extends AppCompatActivity {
                             default:
                                 Log.e(TAG, "Incorrectly Passed Region: " + region);
                         }
+                        // Increment Progress Counter
+                        countryCounter++;
+                        if (countryCounter % (countryJsonArray.length() / 25) == 0) {
+                            // update progress
+                            publishProgress(countryCounter * 100 / countryJsonArray.length());
+                        }
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -197,7 +219,6 @@ public class TopLevelActivity extends AppCompatActivity {
                                     .show();
                         }
                     });
-
                 }
             } else {
                 Log.e(TAG, "Couldn't get json from server.");
@@ -212,31 +233,18 @@ public class TopLevelActivity extends AppCompatActivity {
                 });
 
             }
-
             return null;
         }
 
         @Override
+        //
+        // PRE:
+        // POST:
+        // RETURN: void
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             // Dismiss the progress dialog
-//            if (pDialog.isShowing())
-//                pDialog.dismiss();
-
-//            for (Country myCountry: Country.AFRICA) {
-//                if (myCountry.getName().equals("Afghanistan")) {
-//                    Log.e(TAG, "AFGHAN FOUND");
-//                }
-//            }
-
-            //Toon[] toonArray = toonList.toArray(new Toon[toonList.size()]);
-
-            //CountryAdapter adapter = new CountryAdapter(CountryActivity.this, countryList);
-
-            // Attach the adapter to a ListView
-//            lv.setAdapter(adapter);
+                pDialog.dismiss();
         }
     }
-
 }

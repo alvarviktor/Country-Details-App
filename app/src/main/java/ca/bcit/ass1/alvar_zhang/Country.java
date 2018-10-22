@@ -11,9 +11,9 @@ public class Country implements Parcelable {
     private String name;
     private String capital;
     private String region;
-    private int population;
-    private int area;
-    private ArrayList<String> borders;
+    private String population;
+    private String area;
+    private String borders;
     private String flag;
 
     // Public Regions
@@ -30,18 +30,18 @@ public class Country implements Parcelable {
     public String getName() { return name; }
     public String getCapital() { return capital; }
     public String getRegion() { return region; }
-    public int getPopulation() { return population; }
-    public int getArea() { return area; }
-    public ArrayList<String> getBorders() { return borders; }
+    public String getPopulation() { return population; }
+    public String getArea() { return area; }
+    public String getBorders() { return borders; }
     public String getFlag() { return flag; }
 
     // Setters
     public void setName(String name) { this.name = name; }
     public void setCapital(String capital) { this.capital = capital; }
     public void setRegion(String region) { this.region = region; }
-    public void setPopulation(int population) { this.population = population; }
-    public void setArea(int area) { this.area = area; }
-    public void setBorders(ArrayList<String> borders) { this.borders = borders; }
+    public void setPopulation(String population) { this.population = population; }
+    public void setArea(String area) { this.area = area; }
+    public void setBorders(String borders) { this.borders = borders; }
     public void setFlag(String flag) { this.flag = flag; }
 
     // toString Method
@@ -55,14 +55,15 @@ public class Country implements Parcelable {
         name = in.readString();
         capital = in.readString();
         region = in.readString();
-        population = in.readInt();
-        area = in.readInt();
-        if (in.readByte() == 0x01) {
-            borders = new ArrayList<String>();
-            in.readList(borders, String.class.getClassLoader());
-        } else {
-            borders = null;
-        }
+        population = in.readString();
+        area = in.readString();
+        borders = in.readString();
+//        if (in.readByte() == 0x01) {
+//            borders = new ArrayList<String>();
+//            in.readList(borders, String.class.getClassLoader());
+//        } else {
+//            borders = null;
+//        }
         flag = in.readString();
     }
 
@@ -76,14 +77,15 @@ public class Country implements Parcelable {
         dest.writeString(name);
         dest.writeString(capital);
         dest.writeString(region);
-        dest.writeInt(population);
-        dest.writeInt(area);
-        if (borders == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(borders);
-        }
+        dest.writeString(population);
+        dest.writeString(area);
+        dest.writeString(borders);
+//        if (borders == null) {
+//            dest.writeByte((byte) (0x00));
+//        } else {
+//            dest.writeByte((byte) (0x01));
+//            dest.writeList(borders);
+//        }
         dest.writeString(flag);
     }
 
