@@ -1,2 +1,3 @@
-# android-assignment1
-COMP 3717 - Assignment#1
+# Country Details App
+An android app that takes JSON objects from an HTTP GET Request using the endpoint https://restcountries.eu/
+
